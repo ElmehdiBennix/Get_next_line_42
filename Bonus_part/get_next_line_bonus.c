@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 21:08:21 by ebennix           #+#    #+#             */
-/*   Updated: 2022/12/27 13:01:27 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/23 21:08:08 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_restbuff(char *buff)
+static char	*ft_restbuff(char *buff)
 {
 	char	*str;
 	int		i;
@@ -41,7 +41,7 @@ char	*ft_restbuff(char *buff)
 	return (str);
 }
 
-char	*ft_getline(char *buff)
+static char	*ft_getline(char *buff)
 {
 	char	*line;
 	int		i;
@@ -69,7 +69,7 @@ char	*ft_getline(char *buff)
 	return (line);
 }
 
-char	*ft_readit(int fd, char *buff)
+static char	*ft_readit(int fd, char *buff)
 {
 	char	*line;
 	int		i;
