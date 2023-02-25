@@ -6,120 +6,120 @@
 /*   By: ebennix <ebennix@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 21:08:21 by ebennix           #+#    #+#             */
-/*   Updated: 2023/02/25 08:41:04 by ebennix          ###   ########.fr       */
+/*   Updated: 2023/02/25 10:07:32 by ebennix          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_restbuff(char *buff)
+static char	*ft_restbuffer(char *buffer)
 {
-	char	*str;
+	char	*rest;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	while (buff[i] && buff[i] != '\n')
+	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	if (!buff[i])
+	if (!buffer[i])
 	{
-		free (buff);
+		free (buffer);
 		return (NULL);
 	}
-	str = (char *) malloc ((ft_strlen(buff)) - i + 1 * sizeof(char));
-	if (!str)
+	rest = (char *) malloc ((ft_strlen(buffer)) - i + 1 * sizeof(char));
+	if (!rest)
 		return (NULL);
-	if (buff[i] && buff[i] == '\n')
+	if (buffer[i] && buffer[i] == '\n')
 	{
 		i++;
-		while (buff[i])
-			str[j++] = buff[i++];
-		str[j] = '\0';
+		while (buffer[i])
+			rest[j++] = buffer[i++];
+		rest[j] = '\0';
 	}
-	free (buff);
-	return (str);
+	free (buffer);
+	return (rest);
 }
 
-static char	*ft_getline(char *buff)
+static char	*ft_getrow(char *buffer)
 {
-	char	*line;
+	char	*row;
 	int		i;
 
 	i = 0;
-	if (!buff[i])
+	if (!buffer[i])
 		return (NULL);
-	while (buff[i] && buff[i] != '\n')
+	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	if (buff[i] == '\n')
-		line = (char *) malloc (i + 2 * sizeof(char));
+	if (buffer[i] == '\n')
+		row = (char *) malloc (i + 2 * sizeof(char));
 	else
-		line = (char *) malloc (i + 1 * sizeof(char));
-	if (!line)
+		row = (char *) malloc (i + 1 * sizeof(char));
+	if (!row)
 		return (NULL);
 	i = -1;
-	while (buff[++i] && buff[i] != '\n')
-		line[i] = buff[i];
-	if (buff[i] == '\n')
+	while (buffer[++i] && buffer[i] != '\n')
+		row[i] = buffer[i];
+	if (buffer[i] == '\n')
 	{
-		line[i] = buff[i];
+		row[i] = buffer[i];
 		i++;
 	}
-	line[i] = '\0';
-	return (line);
+	row[i] = '\0';
+	return (row);
 }
 
-static char	*ft_readit(int fd, char *buff)
+static char	*ft_readit(int fd, char *buffer)
 {
-	char	*line;
+	char	*row;
 	int		i;
 
-	line = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!line)
+	row = (char *) malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!row)
 		return (NULL);
 	i = 1;
-	while (!ft_strchr(buff, '\n') && i > 0)
+	while (!ft_strchr(buffer, '\n') && i > 0)
 	{
-		i = read(fd, line, BUFFER_SIZE);
+		i = read(fd, row, BUFFER_SIZE);
 		if (i == -1)
 		{
-			free (line);
-			if (buff)
-				free (buff);
+			free (row);
+			if (buffer)
+				free (buffer);
 			return (NULL);
 		}
-		line[i] = '\0';
-		buff = ft_strjoin(buff, line);
+		row[i] = '\0';
+		buffer = ft_strjoin(buffer, row);
 	}
-	free (line);
-	return (buff);
+	free (row);
+	return (buffer);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buff;
-	char		*line;
+	static char		*buffer;
+	char			*row;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buff = ft_readit(fd, buff);
-	if (!buff)
+	buffer[fd] = ft_readit(fd, buffer);
+	if (!buffer)
 		return (NULL);
-	line = ft_getline(buff);
-	buff = ft_restbuff(buff);
-	return (line);
+	row = ft_getline(buffer);
+	buffer = ft_restbuffer(buffer);
+	return (row);
 }
 
-int main (void)
-{
-	int fd =open("Lorem", O_RDONLY);
-	while(1)
-	{
-		char *line = get_next_line(fd);
-		printf ("%s",line);
-		free(line);
-		if(!line)
-			break;
-	}
-	return(0);
-}
+// int main (void)
+// {
+// 	int fd =open("Lorem.txt", O_RDONLY);
+// 	while(1)
+// 	{
+// 		char *line = get_next_line(fd);
+// 		printf ("%s",line);
+// 		free(line);
+// 		if(!line)
+// 			break;
+// 	}
+// 	return(0);
+// }
